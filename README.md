@@ -193,6 +193,8 @@ El backend simulado (JSON Server) expone los siguientes endpoints:
 Este proyecto fue creado con fines educativos y de demostración.
 
 ## 👨‍💻 Autor
+Daniel Fernandez Flores.
+C.i: 24184695
 
 Desarrollado como proyecto de aprendizaje de React + Vite con CRUD completo.
 
