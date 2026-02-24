@@ -1,201 +1,61 @@
-# 🎮 Pixel Vault - Game Store
+# 🎮 Pixel Vault - Game Store v2.0
 
-Una aplicación web SPA (Single Page Application) desarrollada con React + Vite para gestionar el inventario de una tienda de videojuegos con operaciones CRUD completas.
+Aplicación web completa de e-commerce para tienda de videojuegos con **React + Vite**, **React Router**, **Node.js + Express**, y funcionalidades avanzadas.
 
-## ✨ Características
+## ✨ Características v2.0
 
-### Funcionalidades Principales
+🌐 **Landing Page** - Hero section, productos destacados, sobre nosotros  
+🔐 **Autenticación** - Registro, login, sesiones  
+🛒 **Carrito** - Agregar, eliminar, calcular totales  
+⭐ **Reviews** - Calificaciones y comentarios  
+🚀 **Backend** - Node.js + Express API REST  
+📱 **Responsive** - Diseño adaptable  
 
-- **📋 Listado de Productos**: Vista de cuadrícula con todos los videojuegos disponibles
-- **➕ Crear Producto**: Formulario completo para agregar nuevos juegos al inventario
-- **✏️ Actualizar Producto**: Edición de productos existentes con formulario prellenado
-- **🗑️ Eliminar Producto**: Eliminación con confirmación de productos
-- **🔍 Búsqueda**: Búsqueda en tiempo real por nombre, descripción o categoría
-- **📊 Inventario Completo**: Tabla detallada con todo el stock disponible
-- **📈 Estadísticas**: Panel con métricas del inventario en tiempo real
-
-### Detalles de Productos
-
-Cada producto incluye:
-- Nombre
-- Descripción
-- Precio
-- Cantidad disponible
-- Imagen representativa
-- Categoría
-
-### Categorías Disponibles
-
-- Acción
-- Aventura
-- RPG
-- Deportes
-- Carreras
-- Estrategia
-- Shooter
-- Plataformas
-
-## 🚀 Instalación y Configuración
-
-### Requisitos Previos
-
-- Node.js (versión 16 o superior)
-- npm o yarn
-
-### Pasos de Instalación
-
-1. **Instalar dependencias**:
-   ```bash
-   npm install
-   ```
-
-2. **Instalar JSON Server** (para el backend simulado):
-   ```bash
-   npm install -g json-server
-   ```
-
-## 🎯 Uso
-
-### Iniciar el Backend (JSON Server)
-
-En una terminal, ejecuta:
+## 🚀 Inicio Rápido
 
 ```bash
-npm run server
+# Instalar dependencias
+npm install
+
+# Iniciar todo (backend + frontend)
+npm start
 ```
 
-Esto iniciará el servidor en `http://localhost:3001`
+Abre `http://localhost:3000`
 
-### Iniciar el Frontend (React + Vite)
+## 📁 Rutas
 
-En otra terminal, ejecuta:
+- `/` - Landing page
+- `/store` - Tienda (CRUD admin)
+- `/about` - Sobre nosotros
+- `/login` - Iniciar sesión
+- `/register` - Registrarse
+- `/cart` - Carrito (requiere login)
 
-```bash
-npm run dev
-```
+## 🔌 API Endpoints
 
-La aplicación estará disponible en `http://localhost:3000`
+**Productos**: GET/POST/PUT/DELETE `/api/products`  
+**Auth**: POST `/api/auth/register` `/api/auth/login`  
+**Carrito**: GET/POST/DELETE `/api/cart/:userId`  
+**Reviews**: GET/POST `/api/products/:id/reviews`  
 
-## 🎨 Diseño
+## 🛠️ Tecnologías
 
-La aplicación cuenta con un diseño **retro-gaming arcade** con elementos modernos:
+**Frontend**: React 18, React Router, Context API, CSS3  
+**Backend**: Node.js, Express, CORS  
+**Diseño**: Retro-gaming, animaciones, gradientes neón  
 
-- 🌈 Paleta de colores neón vibrante
-- ⚡ Animaciones suaves y efectos de hover
-- 🎯 Tipografía pixel-art (Press Start 2P) para títulos
-- 💫 Efectos de glow y sombras neón
-- 📱 Diseño completamente responsive
+## 📝 Changelog v2.0
 
-## 🛠️ Tecnologías Utilizadas
-
-### Frontend
-- **React 18**: Biblioteca de UI
-- **Vite**: Build tool y bundler
-- **CSS3**: Estilos personalizados con animaciones
-
-### Backend
-- **JSON Server**: API REST simulada
-
-### Tipografías
-- **Press Start 2P**: Títulos retro
-- **Orbitron**: Texto general futurista
-
-## 📁 Estructura del Proyecto
-
-```
-videogame-store/
-├── src/
-│   ├── components/
-│   │   ├── ProductCard.jsx      # Tarjeta de producto
-│   │   ├── ProductForm.jsx      # Formulario crear/editar
-│   │   └── SearchBar.jsx        # Barra de búsqueda
-│   ├── services/
-│   │   └── productService.js    # API service para CRUD
-│   ├── styles/
-│   │   ├── App.css              # Estilos principales
-│   │   ├── ProductCard.css      # Estilos de tarjetas
-│   │   ├── ProductForm.css      # Estilos de formulario
-│   │   └── SearchBar.css        # Estilos de búsqueda
-│   ├── App.jsx                  # Componente principal
-│   └── main.jsx                 # Punto de entrada
-├── db.json                      # Base de datos simulada
-├── index.html                   # HTML principal
-├── vite.config.js              # Configuración de Vite
-└── package.json                 # Dependencias
-```
-
-## 🔄 API Endpoints
-
-El backend simulado (JSON Server) expone los siguientes endpoints:
-
-- `GET /products` - Obtener todos los productos
-- `GET /products/:id` - Obtener un producto por ID
-- `POST /products` - Crear un nuevo producto
-- `PUT /products/:id` - Actualizar un producto
-- `DELETE /products/:id` - Eliminar un producto
-
-## 💡 Características de UX
-
-### Animaciones
-- Fade-in escalonado de tarjetas
-- Efectos hover con transformaciones 3D
-- Transiciones suaves en todos los elementos
-- Loading spinner durante la carga
-
-### Interactividad
-- Confirmación antes de eliminar
-- Preview de imágenes en el formulario
-- Overlay con botones de acción en hover
-- Feedback visual en todas las acciones
-
-### Responsive Design
-- Adaptación completa a móviles y tablets
-- Grid responsive que se ajusta al tamaño de pantalla
-- Tabla que se convierte en lista en móviles
-- Controles optimizados para touch
-
-## 🎮 Flujo de Uso
-
-1. **Inicio**: Al cargar, se muestran todos los productos disponibles
-2. **Buscar**: Usa la barra de búsqueda para filtrar productos
-3. **Agregar**: Click en "AGREGAR JUEGO" para crear un nuevo producto
-4. **Editar**: Hover sobre una tarjeta y click en "EDITAR"
-5. **Eliminar**: Hover sobre una tarjeta y click en "ELIMINAR" (con confirmación)
-6. **Ver Inventario**: Scroll hacia abajo para ver la tabla completa
-
-## 🐛 Solución de Problemas
-
-### El servidor no inicia
-- Verifica que JSON Server esté instalado: `npm install -g json-server`
-- Asegúrate de que el puerto 3001 esté disponible
-
-### Las imágenes no cargan
-- Verifica que las URLs de las imágenes sean válidas
-- Usa URLs de servicios como Unsplash o servicios de imágenes
-
-### Errores de CORS
-- JSON Server debería manejar CORS automáticamente
-- Si persiste, agrega `--middlewares ./cors.js` al comando de server
-
-## 🔮 Mejoras Futuras
-
-- [ ] Autenticación de usuarios
-- [ ] Filtros avanzados por categoría y precio
-- [ ] Ordenamiento de productos
-- [ ] Paginación
-- [ ] Carrito de compras
-- [ ] Sistema de reviews
-- [ ] Upload de imágenes
-- [ ] Modo oscuro/claro toggle
-
-## 📝 Licencia
-
-Este proyecto fue creado con fines educativos y de demostración.
-
-## 👨‍💻 Autor
-
-Desarrollado como proyecto de aprendizaje de React + Vite con CRUD completo.
+✨ Landing Page + Hero Section  
+✨ Sistema de autenticación  
+✨ Carrito de compras  
+✨ Reviews y ratings  
+✨ Backend Node.js + Express  
+✨ React Router  
+✨ Navegación profesional  
+📝 Código documentado  
 
 ---
 
-¡Disfruta gestionando tu tienda de videojuegos! 🎮✨
+¡Tu tienda de videojuegos lista para despegar! 🎮✨

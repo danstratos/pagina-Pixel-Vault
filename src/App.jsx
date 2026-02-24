@@ -1,299 +1,163 @@
-import React, { useState, useEffect } from 'react';
-import ProductCard from './components/ProductCard';
-import ProductForm from './components/ProductForm';
-import SearchBar from './components/SearchBar';
-import { productService } from './services/productService';
+import React from 'react';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Home from './pages/Home';
+import Store from './pages/Store';
+import About from './pages/About';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Cart from './pages/Cart';
 import './styles/App.css';
+import './styles/Navigation.css';
 
-function App() {
-  // ==================== ESTADOS ====================
-  // Estado para almacenar todos los productos de la base de datos
-  const [products, setProducts] = useState([]);
-  
-  // Estado para almacenar los productos filtrados por búsqueda
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  
-  // Estado para mostrar/ocultar el spinner de carga
-  const [loading, setLoading] = useState(true);
-  
-  // Estado para controlar la visibilidad del formulario modal
-  const [showForm, setShowForm] = useState(false);
-  
-  // Estado para almacenar el producto que se está editando (null si es creación)
-  const [editingProduct, setEditingProduct] = useState(null);
-  
-  // Estado para saber si hay una búsqueda activa
-  const [searchActive, setSearchActive] = useState(false);
+// Componente de Navegación
+function Navigation() {
+  const { user, logout } = useAuth();
+  const location = useLocation();
 
-  // ==================== EFECTOS ====================
-  // useEffect se ejecuta cuando el componente se monta (carga inicial)
-  useEffect(() => {
-    loadProducts(); // Cargar productos al iniciar la aplicación
-  }, []); // Array vacío [] significa "solo ejecutar una vez al montar"
+  const isActive = (path) => location.pathname === path;
 
-  // ==================== FUNCIONES DE CRUD ====================
-  
-  /**
-   * Cargar todos los productos desde el backend
-   */
-  const loadProducts = async () => {
-    try {
-      setLoading(true); // Mostrar spinner de carga
-      const data = await productService.getAllProducts(); // Petición GET al backend
-      setProducts(data); // Guardar productos en el estado
-      setFilteredProducts(data); // Inicialmente, productos filtrados = todos los productos
-    } catch (error) {
-      // Si hay error (ej: servidor no está corriendo), mostrar alerta
-      alert('Error al cargar los productos. Asegúrate de que el servidor esté ejecutándose.');
-    } finally {
-      setLoading(false); // Ocultar spinner independientemente del resultado
-    }
-  };
+  return (
+    <nav className="navbar">
+      <div className="navbar__container">
+        {/* Logo */}
+        <Link to="/" className="navbar__logo">
+          <span className="navbar__logo-icon">🎮</span>
+          <span className="navbar__logo-text">PIXEL VAULT</span>
+        </Link>
 
-  /**
-   * Crear un nuevo producto
-   * @param {Object} productData - Datos del producto a crear
-   */
-  const handleCreate = async (productData) => {
-    try {
-      await productService.createProduct(productData); // Petición POST al backend
-      await loadProducts(); // Recargar la lista de productos
-      setShowForm(false); // Cerrar el formulario modal
-      alert('¡Producto creado exitosamente!');
-    } catch (error) {
-      alert('Error al crear el producto');
-    }
-  };
+        {/* Navigation Links */}
+        <div className="navbar__menu">
+          <Link 
+            to="/" 
+            className={`navbar__link ${isActive('/') ? 'navbar__link--active' : ''}`}
+          >
+            Inicio
+          </Link>
+          <Link 
+            to="/store" 
+            className={`navbar__link ${isActive('/store') ? 'navbar__link--active' : ''}`}
+          >
+            Tienda
+          </Link>
+          <Link 
+            to="/about" 
+            className={`navbar__link ${isActive('/about') ? 'navbar__link--active' : ''}`}
+          >
+            Nosotros
+          </Link>
+        </div>
 
-  /**
-   * Actualizar un producto existente
-   * @param {Object} productData - Datos actualizados del producto
-   */
-  const handleUpdate = async (productData) => {
-    try {
-      // Petición PUT al backend con el ID del producto a actualizar
-      await productService.updateProduct(editingProduct.id, productData);
-      await loadProducts(); // Recargar la lista
-      setShowForm(false); // Cerrar formulario
-      setEditingProduct(null); // Limpiar el producto en edición
-      alert('¡Producto actualizado exitosamente!');
-    } catch (error) {
-      alert('Error al actualizar el producto');
-    }
-  };
+        {/* User Actions */}
+        <div className="navbar__actions">
+          {user ? (
+            <>
+              <Link to="/cart" className="navbar__cart">
+                <span className="navbar__cart-icon">🛒</span>
+                <span className="navbar__cart-text">Carrito</span>
+              </Link>
+              <div className="navbar__user">
+                <span className="navbar__user-name">{user.username}</span>
+                <button onClick={logout} className="navbar__logout">
+                  Salir
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="navbar__btn navbar__btn--login">
+                Ingresar
+              </Link>
+              <Link to="/register" className="navbar__btn navbar__btn--register">
+                Registrarse
+              </Link>
+            </>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
+}
 
-  /**
-   * Eliminar un producto
-   * @param {string} id - ID del producto a eliminar
-   */
-  const handleDelete = async (id) => {
-    try {
-      await productService.deleteProduct(id); // Petición DELETE al backend
-      await loadProducts(); // Recargar la lista
-      alert('¡Producto eliminado exitosamente!');
-    } catch (error) {
-      alert('Error al eliminar el producto');
-    }
-  };
+// Componente de Footer
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer__container">
+        <div className="footer__section">
+          <h3 className="footer__title">
+            <span className="footer__icon">🎮</span>
+            PIXEL VAULT
+          </h3>
+          <p className="footer__text">
+            Tu tienda de videojuegos de confianza desde 2020
+          </p>
+        </div>
 
-  /**
-   * Preparar el formulario para editar un producto
-   * @param {Object} product - Producto a editar
-   */
-  const handleEdit = (product) => {
-    setEditingProduct(product); // Guardar el producto en el estado
-    setShowForm(true); // Mostrar el formulario modal
-  };
+        <div className="footer__section">
+          <h4 className="footer__heading">Enlaces</h4>
+          <Link to="/" className="footer__link">Inicio</Link>
+          <Link to="/store" className="footer__link">Tienda</Link>
+          <Link to="/about" className="footer__link">Nosotros</Link>
+        </div>
 
-  /**
-   * Buscar productos por nombre, descripción o categoría
-   * @param {string} query - Término de búsqueda
-   */
-  const handleSearch = async (query) => {
-    // Si la búsqueda está vacía, mostrar todos los productos
-    if (!query.trim()) {
-      setFilteredProducts(products);
-      setSearchActive(false);
-      return;
-    }
+        <div className="footer__section">
+          <h4 className="footer__heading">Soporte</h4>
+          <a href="#" className="footer__link">FAQ</a>
+          <a href="#" className="footer__link">Envíos</a>
+          <a href="#" className="footer__link">Contacto</a>
+        </div>
 
-    try {
-      // Realizar búsqueda en el servicio
-      const results = await productService.searchProducts(query);
-      setFilteredProducts(results); // Actualizar productos filtrados
-      setSearchActive(true); // Marcar que hay una búsqueda activa
-    } catch (error) {
-      alert('Error al buscar productos');
-    }
-  };
+        <div className="footer__section">
+          <h4 className="footer__heading">Síguenos</h4>
+          <div className="footer__social">
+            <a href="#" className="footer__social-link">📘</a>
+            <a href="#" className="footer__social-link">📸</a>
+            <a href="#" className="footer__social-link">🐦</a>
+            <a href="#" className="footer__social-link">📺</a>
+          </div>
+        </div>
+      </div>
+      
+      <div className="footer__bottom">
+        <p className="footer__copyright">
+          © 2026 Pixel Vault Game Store - Todos los derechos reservados
+        </p>
+      </div>
+    </footer>
+  );
+}
 
-  /**
-   * Cancelar el formulario (crear o editar)
-   */
-  const handleCancelForm = () => {
-    setShowForm(false); // Ocultar formulario
-    setEditingProduct(null); // Limpiar producto en edición
-  };
-
-  // ==================== CÁLCULOS DE ESTADÍSTICAS ====================
-  // Total de productos en el inventario
-  const totalProducts = products.length;
-  
-  // Suma total de todas las cantidades en stock
-  const totalStock = products.reduce((sum, p) => sum + p.quantity, 0);
-  
-  // Extraer categorías únicas usando Set (elimina duplicados)
-  const categories = [...new Set(products.map(p => p.category))];
-
-  // ==================== RENDERIZADO ====================
+// Componente principal de la App
+function AppContent() {
   return (
     <div className="app">
-      {/* ========== HEADER ========== */}
-      <header className="header">
-        <div className="header__content">
-          {/* Título principal con icono y subtítulo */}
-          <h1 className="header__title">
-            <span className="header__icon">🎮</span>
-            PIXEL VAULT
-            <span className="header__subtitle">GAME STORE</span>
-          </h1>
-          
-          {/* Estadísticas en tiempo real */}
-          <div className="header__stats">
-            <div className="stat">
-              <span className="stat__value">{totalProducts}</span>
-              <span className="stat__label">Juegos</span>
-            </div>
-            <div className="stat">
-              <span className="stat__value">{totalStock}</span>
-              <span className="stat__label">Stock Total</span>
-            </div>
-            <div className="stat">
-              <span className="stat__value">{categories.length}</span>
-              <span className="stat__label">Categorías</span>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* ========== CONTENIDO PRINCIPAL ========== */}
-      <main className="main">
-        <div className="container">
-          {/* ========== CONTROLES (Búsqueda + Agregar) ========== */}
-          <div className="controls">
-            {/* Componente de búsqueda */}
-            <SearchBar onSearch={handleSearch} />
-            
-            {/* Botón para abrir el formulario de crear producto */}
-            <button 
-              onClick={() => setShowForm(true)}
-              className="btn-add"
-            >
-              <span className="btn-add__icon">+</span>
-              AGREGAR JUEGO
-            </button>
-          </div>
-
-          {/* ========== INFORMACIÓN DE RESULTADOS DE BÚSQUEDA ========== */}
-          {searchActive && (
-            <div className="search-results">
-              <p className="search-results__text">
-                {filteredProducts.length} resultado(s) encontrado(s)
-              </p>
-            </div>
-          )}
-
-          {/* ========== GRID DE PRODUCTOS ========== */}
-          {loading ? (
-            // Mostrar spinner mientras se cargan los productos
-            <div className="loading">
-              <div className="loading__spinner"></div>
-              <p className="loading__text">Cargando juegos...</p>
-            </div>
-          ) : filteredProducts.length === 0 ? (
-            // Mostrar mensaje si no hay productos
-            <div className="empty-state">
-              <div className="empty-state__icon">🎯</div>
-              <h2 className="empty-state__title">No hay juegos disponibles</h2>
-              <p className="empty-state__text">
-                {searchActive 
-                  ? 'No se encontraron resultados. Intenta con otra búsqueda.'
-                  : 'Comienza agregando tu primer juego al inventario.'}
-              </p>
-            </div>
-          ) : (
-            // Mostrar grid de productos
-            <div className="product-grid">
-              {filteredProducts.map(product => (
-                <ProductCard
-                  key={product.id} // Key único para React
-                  product={product} // Pasar datos del producto
-                  onEdit={handleEdit} // Callback para editar
-                  onDelete={handleDelete} // Callback para eliminar
-                />
-              ))}
-            </div>
-          )}
-
-          {/* ========== TABLA DE INVENTARIO COMPLETO ========== */}
-          {/* Solo se muestra si NO hay búsqueda activa y HAY productos */}
-          {!searchActive && products.length > 0 && (
-            <section className="product-list-section">
-              <h2 className="section-title">
-                <span className="section-title__icon">📋</span>
-                INVENTARIO COMPLETO
-              </h2>
-              <div className="product-table">
-                {/* Encabezado de la tabla */}
-                <div className="product-table__header">
-                  <div className="product-table__col">Juego</div>
-                  <div className="product-table__col">Categoría</div>
-                  <div className="product-table__col">Stock</div>
-                  <div className="product-table__col">Descripción</div>
-                </div>
-                {/* Filas de la tabla */}
-                {products.map(product => (
-                  <div key={product.id} className="product-table__row">
-                    <div className="product-table__col product-table__name">
-                      {product.name}
-                    </div>
-                    <div className="product-table__col">
-                      <span className="badge">{product.category}</span>
-                    </div>
-                    <div className="product-table__col">
-                      {/* Cambiar estilo si el stock es bajo (< 10) */}
-                      <span className={`stock-badge ${product.quantity < 10 ? 'stock-badge--low' : ''}`}>
-                        {product.quantity} unidades
-                      </span>
-                    </div>
-                    <div className="product-table__col product-table__desc">
-                      {product.description}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
+      <Navigation />
+      
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/store" element={<Store />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/cart" element={<Cart />} />
+        </Routes>
       </main>
 
-      {/* ========== MODAL DE FORMULARIO ========== */}
-      {/* Solo se muestra si showForm es true */}
-      {showForm && (
-        <ProductForm
-          product={editingProduct} // null = crear, objeto = editar
-          onSave={editingProduct ? handleUpdate : handleCreate} // Función según el modo
-          onCancel={handleCancelForm} // Función para cerrar
-        />
-      )}
-
-      {/* ========== FOOTER ========== */}
-      <footer className="footer">
-        <p className="footer__text">
-          © 2026 Pixel Vault Game Store - Tu tienda de videojuegos de confianza
-        </p>
-      </footer>
+      <Footer />
     </div>
+  );
+}
+
+// App con Router y Auth Provider
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

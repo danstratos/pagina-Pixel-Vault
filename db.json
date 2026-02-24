@@ -7,7 +7,9 @@
       "price": 59.99,
       "quantity": 25,
       "category": "Aventura",
-      "image": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=300&fit=crop"
+      "image": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=300&fit=crop",
+      "rating": 4.8,
+      "reviews": []
     },
     {
       "id": "2",
@@ -16,7 +18,9 @@
       "price": 49.99,
       "quantity": 15,
       "category": "RPG",
-      "image": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&fit=crop"
+      "image": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&fit=crop",
+      "rating": 4.2,
+      "reviews": []
     },
     {
       "id": "3",
@@ -25,7 +29,9 @@
       "price": 69.99,
       "quantity": 30,
       "category": "Deportes",
-      "image": "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&h=300&fit=crop"
+      "image": "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&h=300&fit=crop",
+      "rating": 4.5,
+      "reviews": []
     },
     {
       "id": "4",
@@ -34,7 +40,9 @@
       "price": 59.99,
       "quantity": 20,
       "category": "RPG",
-      "image": "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&h=300&fit=crop"
+      "image": "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&h=300&fit=crop",
+      "rating": 4.9,
+      "reviews": []
     },
     {
       "id": "5",
@@ -43,7 +51,10 @@
       "price": 54.99,
       "quantity": 40,
       "category": "Carreras",
-      "image": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=300&fit=crop"
+      "image": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=300&fit=crop",
+      "rating": 4.7,
+      "reviews": []
     }
-  ]
+  ],
+  "users": []
 }
