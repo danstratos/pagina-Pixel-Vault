@@ -56,5 +56,15 @@
       "reviews": []
     }
   ],
-  "users": []
+  "users": [
+    {
+      "id": "1",
+      "username": "Danstratos",
+      "email": "Danieru2727@gmail.com",
+      "password": "Danieru27",
+      "createdAt": "2026-02-24T21:18:58.788Z",
+      "cart": [],
+      "wishlist": []
+    }
+  ]
 }
